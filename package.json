@@ -1,0 +1,33 @@
+{
+  "name": "react-native-f1-jm",
+  "version": "1.0.4",
+  "description": "F1设备君视芯wifi模式视频播放",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react-native",
+    "browser",
+    "image"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CLANNADAIR/react-native-jmImageBrowser"
+  },
+  "bugs": {
+    "url": "https://github.com/CLANNADAIR/react-native-jmImageBrowser/issues"
+  },
+  "homepage": "https://github.com/CLANNADAIR/react-native-jmImageBrowser#readme",
+  "author": {
+    "name": "CLANNADAIR",
+    "email": "522674616@qq.com"
+  },
+  "peerDependencies": {
+    "react-native": "0.58.6"
+  },
+  "dependencies": {
+    "user": "0.0.0"
+  }
+}
