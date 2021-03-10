@@ -1,4 +1,4 @@
+import _JMF1MonitorView from './js/JMF1MonitorView';
 
-
-export {default as JMF1VideoView} from './JMaxBrowser'
+export const JMF1MonitorView = _JMF1MonitorView;
 

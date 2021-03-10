@@ -1,26 +1,28 @@
 -- Merging decision tree log ---
 manifest
-ADDED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-2:41
-INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-2:41
-INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-2:41
-INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-2:41
-INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-2:41
-INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-2:41
-INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-2:41
+ADDED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-5:12
+INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-5:12
+INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-5:12
+INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-5:12
+INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-5:12
+INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-5:12
+INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-5:12
 	package
-		ADDED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:2:11-39
+		ADDED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:2:5-29
 		INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml
 		INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml
 	android:versionName
 		INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml
-		ADDED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-2:41
+		ADDED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-5:12
 		INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml
 	android:versionCode
 		INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml
-		ADDED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-2:41
+		ADDED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:1-5:12
 		INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:1:11-69
+application
+ADDED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml:3:5-4:19
 uses-sdk
 INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from E:\Jimi\tuqiangonline\node_modules\react-native-f1-jm\android\src\main\AndroidManifest.xml

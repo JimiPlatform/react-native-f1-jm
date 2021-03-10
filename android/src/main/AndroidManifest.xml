@@ -1,2 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.reactnative.f1"/>
+    package="com.jimi.rn.f1">
+    <application>
+    </application>
+</manifest>
