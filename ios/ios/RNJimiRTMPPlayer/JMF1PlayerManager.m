@@ -8,9 +8,7 @@
 
 #import "JMF1PlayerManager.h"
 #import "JMF1MonitorManager.h"
-#import "JMF1JSConstant.h"
 #import <JMOrderCoreKit/JMOrderCoreKit.h>
-
 
 @interface JMF1PlayerManager() <JMOrderCoreKitServerDelegate, JMMediaNetworkPlayerDelegate>
 
@@ -34,16 +32,31 @@ RCT_EXPORT_MODULE(JMF1PlayerManager);
 
 - (NSArray<NSString *> *)supportedEvents
 {
-    return @[kOnStreamPlayerPlayStatus,
-             kOnStreamPlayerTalkStatus,
-             kOnStreamPlayerRecordStatus,
-             kOnStreamPlayerReceiveFrameInfo,
-             kOnStreamPlayerReceiveDeviceData];
+    return @[@"kOnStreamPlayerPlayStatus",
+             @"kOnStreamPlayerTalkStatus",
+             @"kOnStreamPlayerRecordStatus",
+             @"kOnStreamPlayerReceiveFrameInfo",
+             @"kOnStreamPlayerReceiveDeviceData",
+             @"kOnStreamPlayerServerStatus"];
 }
 
 - (NSDictionary *)constantsToExport
 {
-    return [JMF1JSConstant constantsToExport];
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    [dic addEntriesFromDictionary:@{@"kOnStreamPlayerPlayStatus": @"kOnStreamPlayerPlayStatus",
+                                    @"kOnStreamPlayerTalkStatus": @"kOnStreamPlayerTalkStatus",
+                                    @"kOnStreamPlayerRecordStatus": @"kOnStreamPlayerRecordStatus",
+                                    @"kOnStreamPlayerReceiveFrameInfo": @"kOnStreamPlayerReceiveFrameInfo",
+                                    @"kOnStreamPlayerReceiveDeviceData": @"kOnStreamPlayerReceiveDeviceData",
+                                    @"kOnStreamPlayerServerStatus": @"kOnStreamPlayerServerStatus"
+                                    }];
+    
+    [dic addEntriesFromDictionary:@{@"videoStatusPrepare": @(JM_MEDIA_PLAY_STATUS_PREPARE),
+                                    @"videoStatusStart": @(JM_MEDIA_PLAY_STATUS_START),
+                                    @"videoStatusStop": @(JM_MEDIA_PLAY_STATUS_STOP),
+                                    @"videoStatusErrOpenFail": @(JM_MEDIA_PLAY_STATUS_FAILED)
+                                    }];
+    return dic;
 }
 
 - (void)sendEventWithName:(NSString *)eventName body:(id)body
@@ -69,6 +82,7 @@ RCT_EXPORT_METHOD(initialize:(NSString *)key
     self.imei = imei;
     NSLog(@"=====> init  key= %@, \n secret = %@ \n imei = %@ \n userId = %@ \n serverIp = %@",key, secret, imei, userId, serverIp);
     if ([JMOrderCoreKit Initialize] == 0) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didJMSmartAppEngineExit) name:@"kJMSmartAppEngineExit" object:nil];
         [JMOrderCoreKit configServer:serverIp];
         [JMOrderCoreKit configDeveloper:key secret:secret userID:userId];
         JMOrderCoreKit.shared.delegate = self;
@@ -77,8 +91,14 @@ RCT_EXPORT_METHOD(initialize:(NSString *)key
     
 }
 
+RCT_EXPORT_METHOD(connectServer) {
+    [JMOrderCoreKit.shared connect];
+}
+
 RCT_EXPORT_METHOD(deInitialize) {
+    NSLog(@"============ deInitialize ===========>");
     if ([JMOrderCoreKit DeInitialize] == 0) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
         [self.pOrderCamera stop];
         [self.pOrderCamera deattachMonitor];
         JMOrderCoreKit.shared.delegate = nil;
@@ -86,8 +106,16 @@ RCT_EXPORT_METHOD(deInitialize) {
 }
 
 RCT_EXPORT_METHOD(startPlayLive) {
+    __weak typeof(self) weakSelf = self;
     [self.pOrderCamera startPlay:^(BOOL success, JMError * _Nullable error) {
-        NSLog(@"startPlay:%d error[%ld]:%@", success, (long)error.errCode, error.errMsg);
+        NSLog(@"=============================startPlay:%d error[%ld]:%@ ========================>", success, (long)error.errCode, error.errMsg);
+        
+        NSMutableDictionary *body = [weakSelf getEmptyBody];
+        body[@"status"] = @(success?JM_MEDIA_PLAY_STATUS_START:JM_MEDIA_PLAY_STATUS_FAILED);
+        if (error) {
+            body[@"errMsg"] = error.errMsg.length?error.errMsg:@"";
+        }
+        [weakSelf sendEventWithName:@"kOnStreamPlayerPlayStatus" body:body];
     }];
     
 }
@@ -97,42 +125,25 @@ RCT_EXPORT_METHOD(stopPlay) {
 }
 
 #pragma mark - JMOrderCoreKitServerDelegate
-
-- (void)didJMOrderCoreKitWithError:(JMError *)error
-{
-    NSMutableDictionary *body = [self getEmptyBody];
-
-    if (error) {
-        body[@"errCode"] = @(error.errCode);
-        body[@"errMsg"] = error.errMsg.length?error.errMsg:@"";
-        [self sendEventWithName:kOnStreamPlayerPlayStatus body:body];
-    }
-    NSLog(@"======> didJMOrderCoreKitWithError:%ld error:%@", (long)error.errCode, error.errMsg);
-}
-
 - (void)didJMOrderCoreKitConnectWithStatus:(enum JM_SERVER_CONNET_STATE)state;
 {
-    if (state == JM_SERVER_CONNET_STATE_CONNECTED) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.pOrderCamera startPlay:^(BOOL success, JMError * _Nullable error) {
-                NSLog(@"startPlay:%d error[%ld]:%@", success, (long)error.errCode, error.errMsg);
-            }];
-        });
-    } else if (state >= JM_SERVER_CONNET_STATE_FAILED) {
-        NSLog(@"======> Failed to connect server!");
-    }
+//    if (state == JM_SERVER_CONNET_STATE_CONNECTED) {
+//        [self startPlayLive];
+//    }
+    NSMutableDictionary *body = [self getEmptyBody];
+    body[@"status"] = @(state);
+    [self sendEventWithName:@"kOnStreamPlayerServerStatus" body:body];
 }
 
 - (void)didJMOrderCoreKitReceiveDeviceData:(NSString * _Nullable)imei data:(NSString *_Nullable)data
 {
     if (!data) return;
-    [self sendEventWithName:kOnStreamPlayerReceiveDeviceData body:data];
+    [self sendEventWithName:@"kOnStreamPlayerReceiveDeviceData" body:data];
 }
 
 #pragma mark - JMMediaNetworkPlayerDelegate
 - (void)didJMMediaNetworkPlayerPlay:(JMMediaNetworkPlayer *_Nonnull)player status:(enum JM_MEDIA_PLAY_STATUS)status error:(JMError *_Nullable)error
 {
-    NSLog(@"======> didJMMediaNetworkPlayerPlay----->status: %d", status);
     NSMutableDictionary *body = [self getEmptyBody];
     body[@"status"] = @(status);
 
@@ -141,7 +152,7 @@ RCT_EXPORT_METHOD(stopPlay) {
         body[@"errMsg"] = error.errMsg.length?error.errMsg:@"";
     }
 
-    [self sendEventWithName:kOnStreamPlayerPlayStatus body:body];
+    [self sendEventWithName:@"kOnStreamPlayerPlayStatus" body:body];
 }
 
 - (void)didJMMediaNetworkPlayerPlayInfo:(JMMediaNetworkPlayer *_Nonnull)player playInfo:(JMMediaPlayInfo *)playInfo {
@@ -151,10 +162,9 @@ RCT_EXPORT_METHOD(stopPlay) {
     body[@"videoBps"] = @(playInfo.videoBps);
     body[@"audioBPS"] = @(playInfo.audioBps);
     body[@"timestamp"] = @(playInfo.timestamp);
-//    body[@"totalFrameCount"] = @(totalFrameCount);
     body[@"onlineCount"] = @(playInfo.onlineCount);
 
-    [self sendEventWithName:kOnStreamPlayerReceiveFrameInfo body:body];
+    [self sendEventWithName:@"kOnStreamPlayerReceiveFrameInfo" body:body];
 }
 
 #pragma mark - load
