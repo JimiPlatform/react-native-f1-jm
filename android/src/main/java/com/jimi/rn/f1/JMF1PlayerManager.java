@@ -127,10 +127,19 @@ public class JMF1PlayerManager extends ReactContextBaseJavaModule {
     @ReactMethod
     public void startPlayLive() {
         if (mJMOrderCamera1 != null) {
+            Log.e("JMF1PlayerManager", "startPlayLive");
             mJMOrderCamera1.startPlay(new OnPlayStatusListener() {
                 @Override
                 public void onStatus(boolean success, JMError error) {
                     ZJLog.d("startPlayLive success:");
+                    WritableMap event = Arguments.createMap();
+                    if (!success) {
+                        event.putInt("status", 4);
+                        event.putInt("errCode", (int) error.errCode);
+                        event.putString("errMsg", error.errMsg);
+                        mContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                                .emit(kOnStreamPlayerPlayStatus, event);
+                    }
                 }
             });
             JMF1JMMonitorManager.setIsResume(true);
