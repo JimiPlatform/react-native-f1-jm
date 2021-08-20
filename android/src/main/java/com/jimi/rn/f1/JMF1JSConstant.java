@@ -47,6 +47,7 @@ public class JMF1JSConstant {
     public static String kOnStreamPlayerRecordStatus = "kOnStreamPlayerRecordStatus";
     public static String kOnStreamPlayerReceiveFrameInfo = "kOnStreamPlayerReceiveFrameInfo";
     public static String kOnStreamPlayerReceiveDeviceData = "kOnStreamPlayerReceiveDeviceData";
+    public static String kOnStreamPlayerServerStatus = "kOnStreamPlayerServerStatus";
 
     public static Map<String, Object> constantsToExport() {
         Map<String, Object> constants = new HashMap<>();
@@ -55,6 +56,7 @@ public class JMF1JSConstant {
         constants.put(kOnStreamPlayerRecordStatus, kOnStreamPlayerRecordStatus);
         constants.put(kOnStreamPlayerReceiveFrameInfo, kOnStreamPlayerReceiveFrameInfo);
         constants.put(kOnStreamPlayerReceiveDeviceData, kOnStreamPlayerReceiveDeviceData);
+        constants.put(kOnStreamPlayerServerStatus, kOnStreamPlayerServerStatus);
 
         constants.put("videoStatusPrepare", STREAM_VIDEO_STATUS_PREPARE);
         constants.put("videoStatusStart", STREAM_VIDEO_STATUS_START);
