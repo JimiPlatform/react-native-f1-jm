@@ -69,7 +69,6 @@ RCT_EXPORT_MODULE(JMF1PlayerManager);
 - (void)didJMSmartAppEngineExit
 {
     [self deInitialize];
-    gRNJMMonitor = nil;
 }
 
 #pragma mark -
@@ -96,12 +95,14 @@ RCT_EXPORT_METHOD(connectServer) {
 }
 
 RCT_EXPORT_METHOD(deInitialize) {
-    NSLog(@"============ deInitialize ===========>");
     if ([JMOrderCoreKit DeInitialize] == 0) {
+        NSLog(@"============ deInitialize ===========>");
         [[NSNotificationCenter defaultCenter] removeObserver:self];
+        JMOrderCoreKit.shared.delegate = nil;
         [self.pOrderCamera stop];
         [self.pOrderCamera deattachMonitor];
-        JMOrderCoreKit.shared.delegate = nil;
+        gRNJMMonitor = nil;
+        self.pOrderCamera = nil;
     }
 }
 
@@ -127,9 +128,6 @@ RCT_EXPORT_METHOD(stopPlay) {
 #pragma mark - JMOrderCoreKitServerDelegate
 - (void)didJMOrderCoreKitConnectWithStatus:(enum JM_SERVER_CONNET_STATE)state;
 {
-//    if (state == JM_SERVER_CONNET_STATE_CONNECTED) {
-//        [self startPlayLive];
-//    }
     NSMutableDictionary *body = [self getEmptyBody];
     body[@"status"] = @(state);
     [self sendEventWithName:@"kOnStreamPlayerServerStatus" body:body];
