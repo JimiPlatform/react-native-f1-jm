@@ -108,7 +108,7 @@ RCT_EXPORT_METHOD(deInitialize) {
 
 RCT_EXPORT_METHOD(startPlayLive) {
     __weak typeof(self) weakSelf = self;
-    [self.pOrderCamera startPlay:^(BOOL success, JMError * _Nullable error) {
+    [self.pOrderCamera startPlay:^(BOOL isStart, BOOL success, JMError * _Nullable error) {
         NSLog(@"=============================startPlay:%d error[%ld]:%@ ========================>", success, (long)error.errCode, error.errMsg);
         
         NSMutableDictionary *body = [weakSelf getEmptyBody];
@@ -118,7 +118,6 @@ RCT_EXPORT_METHOD(startPlayLive) {
         }
         [weakSelf sendEventWithName:@"kOnStreamPlayerPlayStatus" body:body];
     }];
-    
 }
 
 RCT_EXPORT_METHOD(stopPlay) {
